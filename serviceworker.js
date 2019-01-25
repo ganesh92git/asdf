@@ -8,6 +8,22 @@ self.addEventListener('install', async event => {
     const cache = await caches.open('static-def'); // stores the shell part
     cache.addAll(staticAssets);
 });
+
+
+self.addEventListener('fetch', event => {
+    const {request} = event;
+    const url = new URL(request.url);
+    if(mode==false)
+    event.respondWith(cacheData(request));
+    else{
+        if(url.origin === location.origin) {
+            event.respondWith(cacheData(request));
+        } else {
+            event.respondWith(networkFirst(request));
+        }
+    }
+});
+
 /*
 self.addEventListener('fetch', function(event) {
   event.respondWith(
