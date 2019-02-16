@@ -58,8 +58,16 @@ table, td, th {
 		window.onload = function() {
 		  auth.onAuthStateChanged(function(user) {
 			if (user) {
-			  console.log('Anonymous user signed-in.', user);
-			  readFiles(true);
+				  console.log('Anonymous user signed-in.', user);
+				  
+				  // check if user is logged in
+				var logstatus = firebase.database().ref('GlobalData/status');
+				console.log("status "+logstatus);
+				if(logstatus=='false'){
+					window.open("index.html","_self");
+				}else{
+					readFiles(true);
+				}
 			} else {
 			  console.log('There was no anonymous session. Creating a new anonymous user.');
 			  // Sign the user in anonymously since accessing Storage requires the user to be authorized.
@@ -72,6 +80,7 @@ table, td, th {
 			}
 		  });
 		}
+		
 		
 		function downloadURI(uri, name) {
 			
